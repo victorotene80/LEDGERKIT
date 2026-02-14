@@ -77,4 +77,3 @@ func TestAccountRef_OtherRequiresCode(t *testing.T) {
 
 	t.Fatalf("expected panic for OTHER without code")
 }
-

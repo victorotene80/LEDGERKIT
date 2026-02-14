@@ -7,10 +7,9 @@ import (
 	lkerr "github.com/Helen-projects/LEDGERKIT/ledgerkit/errors"
 )
 
-
 type Money struct {
-	asset AssetCode
-	scale uint8
+	asset       AssetCode
+	scale       uint8
 	amountMinor int64
 }
 
@@ -33,12 +32,12 @@ func MustNew(asset AssetCode, scale uint8, amountMinor int64) Money {
 	return m
 }
 
-func (m Money) Asset() AssetCode   { return m.asset }
-func (m Money) Scale() uint8       { return m.scale }
-func (m Money) Minor() int64       { return m.amountMinor }
-func (m Money) IsZero() bool       { return m.amountMinor == 0 }
-func (m Money) IsPositive() bool   { return m.amountMinor > 0 }
-func (m Money) IsNegative() bool   { return m.amountMinor < 0 }
+func (m Money) Asset() AssetCode { return m.asset }
+func (m Money) Scale() uint8     { return m.scale }
+func (m Money) Minor() int64     { return m.amountMinor }
+func (m Money) IsZero() bool     { return m.amountMinor == 0 }
+func (m Money) IsPositive() bool { return m.amountMinor > 0 }
+func (m Money) IsNegative() bool { return m.amountMinor < 0 }
 func (m Money) Abs() Money {
 	if m.amountMinor >= 0 {
 		return m

@@ -41,5 +41,5 @@ func MustPosting(account AccountRef, side Side, amt money.Money) Posting {
 }
 
 func (p Posting) Account() AccountRef { return p.account }
-func (p Posting) Side() Side         { return p.side }
-func (p Posting) Money() money.Money { return p.amt }
+func (p Posting) Side() Side          { return p.side }
+func (p Posting) Money() money.Money  { return p.amt }
