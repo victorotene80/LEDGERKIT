@@ -1,16 +1,12 @@
 package ledger
 
 import (
+	"strings"
+
 	lkerr "github.com/victorotene80/LEDGERKIT/ledgerkit/errors"
+	"github.com/victorotene80/LEDGERKIT/ledgerkit/money"
 )
 
-// ValidateJournalEntry enforces LedgerKit invariants:
-//
-// 1) An entry must contain at least 2 postings.
-// 2) All postings must use the same AssetCode (+ same Scale).
-// 3) All posting amounts must be positive.
-// 4) Sum(Debits) == Sum(Credits).
-// 5) No zero-value postings.
 func ValidateJournalEntry(je JournalEntry) error {
 	postings := je.Postings() // defensive copy
 
@@ -23,8 +19,8 @@ func ValidateJournalEntry(je JournalEntry) error {
 	refAsset := ref.Asset()
 	refScale := ref.Scale()
 
-	var debitTotal int64
-	var creditTotal int64
+	debits := money.MustNew(refAsset, refScale, 0)
+	credits := money.MustNew(refAsset, refScale, 0)
 
 	for _, p := range postings {
 		// Posting-level invariants
@@ -42,28 +38,28 @@ func ValidateJournalEntry(je JournalEntry) error {
 			return lkerr.ErrScaleMismatch
 		}
 
-		// Sum totals
+		// Sum totals (uses Money.Add -> keeps overflow handling consistent)
+		var err error
 		switch p.Side() {
 		case SideDebit:
-			debitTotal += m.Minor()
+			debits, err = debits.Add(m)
 		case SideCredit:
-			creditTotal += m.Minor()
+			credits, err = credits.Add(m)
 		default:
 			return lkerr.ErrInvalidSide
 		}
+		if err != nil {
+			return err
+		}
 	}
 
-	if debitTotal != creditTotal {
+	if debits.Minor() != credits.Minor() {
 		return lkerr.ErrUnbalancedEntry
 	}
 
 	return nil
 }
 
-// ValidatePosting enforces posting-level invariants:
-// - account ref must be valid
-// - side must be valid
-// - money must be positive and non-zero
 func ValidatePosting(p Posting) error {
 	if err := ValidateAccountRef(p.Account()); err != nil {
 		return err
@@ -86,13 +82,29 @@ func ValidatePosting(p Posting) error {
 	return nil
 }
 
-// ValidateAccountRef is intentionally conservative until you finalize AccountRef design.
-// Once you switch to AccountKind string + OTHER requires code, tighten this.
 func ValidateAccountRef(a AccountRef) error {
-	// At minimum: require non-empty ID.
-	if a.ID() == "" {
+	id := strings.TrimSpace(a.ID())
+	if id == "" {
 		return lkerr.ErrInvalidAccountRef
 	}
-	// TODO (after you paste account_ref.go): validate kind + OTHER code rules.
+
+	k := a.Kind()
+	if !k.ValidBasic() {
+		return lkerr.ErrInvalidAccountRef
+	}
+
+	code := strings.TrimSpace(a.Code())
+	if k == KindOther {
+		// REQUIRED when kind == OTHER
+		if code == "" {
+			return lkerr.ErrInvalidAccountRef
+		}
+	} else {
+		// Strict mode: for non-OTHER, code must be empty
+		if code != "" {
+			return lkerr.ErrInvalidAccountRef
+		}
+	}
+
 	return nil
 }
