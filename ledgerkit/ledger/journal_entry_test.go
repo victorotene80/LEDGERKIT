@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Helen-projects/LEDGERKIT/ledgerkit/money"
+	"github.com/victorotene80/LEDGERKIT/ledgerkit/money"
 )
 
 func TestJournalEntry_Balanced(t *testing.T) {
@@ -70,10 +70,30 @@ func TestJournalEntry_NeedsAtLeastTwoPostings(t *testing.T) {
 }
 
 func TestAccountRef_OtherRequiresCode(t *testing.T) {
-	defer func() { _ = recover() }()
+	didPanic := false
+	defer func() {
+		if r := recover(); r != nil {
+			didPanic = true
+		}
+		if !didPanic {
+			t.Fatalf("expected panic for OTHER without code")
+		}
+	}()
 
-	// should panic because OTHER requires code
 	_ = MustAccountRef(KindOther, "", "id_1")
+}
 
-	t.Fatalf("expected panic for OTHER without code")
+func TestJournalEntry_ZeroPostingRejected(t *testing.T) {
+	user := MustAccountRef(KindUser, "", "user_1")
+	clearing := MustAccountRef(KindClearing, "", "main")
+
+	zero := money.MustNew("NGN", 2, 0)
+
+	p1 := MustPosting(user, SideDebit, zero)
+	p2 := MustPosting(clearing, SideCredit, zero)
+
+	_, err := NewJournalEntry("e1", "ext_1", time.Now(), []Posting{p1, p2})
+	if err == nil {
+		t.Fatalf("expected error for zero-value posting")
+	}
 }

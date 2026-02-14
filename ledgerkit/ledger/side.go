@@ -1,6 +1,6 @@
 package ledger
 
-import lkerr "github.com/Helen-projects/LEDGERKIT/ledgerkit/errors"
+import lkerr "github.com/victorotene80/LEDGERKIT/ledgerkit/errors"
 
 type Side uint8
 

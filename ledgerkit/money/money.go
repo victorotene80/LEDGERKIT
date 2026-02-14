@@ -4,7 +4,7 @@ import (
 	"math"
 	"strings"
 
-	lkerr "github.com/Helen-projects/LEDGERKIT/ledgerkit/errors"
+	lkerr "github.com/victorotene80/LEDGERKIT/ledgerkit/errors"
 )
 
 type Money struct {
