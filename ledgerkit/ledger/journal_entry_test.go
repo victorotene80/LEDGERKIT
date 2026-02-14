@@ -85,14 +85,10 @@ func TestAccountRef_OtherRequiresCode(t *testing.T) {
 
 func TestJournalEntry_ZeroPostingRejected(t *testing.T) {
 	user := MustAccountRef(KindUser, "", "user_1")
-	clearing := MustAccountRef(KindClearing, "", "main")
 
 	zero := money.MustNew("NGN", 2, 0)
 
-	p1 := MustPosting(user, SideDebit, zero)
-	p2 := MustPosting(clearing, SideCredit, zero)
-
-	_, err := NewJournalEntry("e1", "ext_1", time.Now(), []Posting{p1, p2})
+	_, err := NewPosting(user, SideDebit, zero)
 	if err == nil {
 		t.Fatalf("expected error for zero-value posting")
 	}
