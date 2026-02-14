@@ -3,7 +3,7 @@ package money
 import (
 	"strings"
 
-	"github.com/Helen-projects/LEDGERKIT/ledgerkit/errors"
+	"github.com/victorotene80/LEDGERKIT/ledgerkit/errors"
 )
 
 type AssetCode string
