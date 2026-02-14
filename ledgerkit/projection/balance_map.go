@@ -98,3 +98,11 @@ func (bm *BalanceMap) ApplyEntries(entries []ledger.JournalEntry) error {
 	}
 	return nil
 }
+
+func (bm *BalanceMap) MustGet(a ledger.AccountRef) money.Money {
+	v, err := bm.Get(a)
+	if err != nil {
+		panic(err)
+	}
+	return v
+}
