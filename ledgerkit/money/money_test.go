@@ -3,7 +3,7 @@ package money
 import (
 	"testing"
 
-	lkerr "github.com/Helen-projects/LEDGERKIT/ledgerkit/errors"
+	lkerr "github.com/victorotene80/LEDGERKIT/ledgerkit/errors"
 )
 
 func TestNewMoney_Valid(t *testing.T) {

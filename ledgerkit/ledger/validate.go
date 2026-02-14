@@ -1,7 +1,7 @@
 package ledger
 
 import (
-	lkerr "github.com/Helen-projects/LEDGERKIT/ledgerkit/errors"
+	lkerr "github.com/victorotene80/LEDGERKIT/ledgerkit/errors"
 )
 
 // ValidateJournalEntry enforces LedgerKit invariants:

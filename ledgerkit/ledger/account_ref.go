@@ -3,7 +3,7 @@ package ledger
 import (
 	"strings"
 
-	lkerr "github.com/Helen-projects/LEDGERKIT/ledgerkit/errors"
+	lkerr "github.com/victorotene80/LEDGERKIT/ledgerkit/errors"
 )
 
 // AccountRef is a logical identifier for an account (kind + optional code + id).

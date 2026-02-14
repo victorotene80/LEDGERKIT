@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Helen-projects/LEDGERKIT/ledgerkit/money"
+	"github.com/victorotene80/LEDGERKIT/ledgerkit/money"
 )
 
 func TestJournalEntry_Balanced(t *testing.T) {

@@ -1,8 +1,8 @@
 package ledger
 
 import (
-	lkerr "github.com/Helen-projects/LEDGERKIT/ledgerkit/errors"
-	"github.com/Helen-projects/LEDGERKIT/ledgerkit/money"
+	lkerr "github.com/victorotene80/LEDGERKIT/ledgerkit/errors"
+	"github.com/victorotene80/LEDGERKIT/ledgerkit/money"
 )
 
 type Posting struct {
