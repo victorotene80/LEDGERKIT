@@ -97,3 +97,19 @@ func (b *EntryBuilder) Build() (ledger.JournalEntry, error) {
 	}
 	return ledger.NewJournalEntry(b.entryID, b.externalRef, b.ts, b.postings)
 }
+
+func (b *EntryBuilder) MustDebit(acct ledger.AccountRef, amt money.Money) *EntryBuilder {
+	nb, err := b.Debit(acct, amt)
+	if err != nil {
+		panic(err)
+	}
+	return nb
+}
+
+func (b *EntryBuilder) MustCredit(acct ledger.AccountRef, amt money.Money) *EntryBuilder {
+	nb, err := b.Credit(acct, amt)
+	if err != nil {
+		panic(err)
+	}
+	return nb
+}

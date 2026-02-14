@@ -15,3 +15,8 @@ func EntryFingerprint(je ledger.JournalEntry) Fingerprint {
 	sum := sha256.Sum256(CanonicalEntryBytes(je))
 	return Fingerprint(sum)
 }
+
+// FingerprintSHA256 is an alias for EntryFingerprint (kept for clarity in examples).
+func FingerprintSHA256(je ledger.JournalEntry) Fingerprint {
+	return EntryFingerprint(je)
+}
