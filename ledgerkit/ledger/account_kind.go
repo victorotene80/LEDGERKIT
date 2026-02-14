@@ -34,3 +34,16 @@ func (k AccountKind) ValidBasic() bool {
 	}
 	return true
 }
+
+func (k AccountKind) Valid() bool {
+	switch k {
+	case KindUser,
+		KindSystem,
+		KindFee,
+		KindClearing,
+		KindOther:
+		return true
+	default:
+		return false
+	}
+}

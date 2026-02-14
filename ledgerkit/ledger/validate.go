@@ -89,18 +89,19 @@ func ValidateAccountRef(a AccountRef) error {
 	}
 
 	k := a.Kind()
-	if !k.ValidBasic() {
+	if !k.Valid() {
 		return lkerr.ErrInvalidAccountRef
 	}
 
 	code := strings.TrimSpace(a.Code())
 	if k == KindOther {
-		// REQUIRED when kind == OTHER
+		// REQUIRED when typ == OTHER
 		if code == "" {
 			return lkerr.ErrInvalidAccountRef
 		}
 	} else {
-		// Strict mode: for non-OTHER, code must be empty
+		// Optional strictness: if not OTHER, you can enforce code must be empty.
+		// This keeps Key() stable and prevents weird "USER:abc:user1" keys.
 		if code != "" {
 			return lkerr.ErrInvalidAccountRef
 		}
